@@ -10,12 +10,6 @@ library(p8105.datasets)
 library(patchwork)
 library(ggridges)
 
-knitr::opts_chunk$set(
-  fig.width = 6,
-  fig.asp = .6,
-  out.width = "90%"
-)
-
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 
 options(
@@ -170,8 +164,8 @@ library(p8105.datasets)
 data("ny_noaa")
 ```
 
-This dataset contains weather records from weather stations around the world. It contains several daily variables, including maximum and minimum temperature, total daily precipitation, snowfall, and snow depth.The dataset has `r ncol(ny_noaa)` columns and `r nrow(ny_noaa)`rows. 
-`r pull(ny_noaa, prcp) %>% is.na() %>% sum()` of the stations didn't report precipitation, `r pull(ny_noaa, snow) %>% is.na() %>% sum()` of the stations didn't report snowfall,  `r pull(ny_noaa, snwd) %>% is.na() %>% sum()` of the stations didn't report snow depth, `r pull(ny_noaa, tmax) %>% is.na() %>% sum()` and `r pull(ny_noaa, tmin) %>% is.na() %>% sum()` of the stations didn't report maximum abd minumin temperature, respectively. Therefore, the resulting dataset contains extensive missing data, which could be an issue for data interpretation.
+This dataset contains weather records from weather stations around the world. It contains several daily variables, including maximum and minimum temperature, total daily precipitation, snowfall, and snow depth.The dataset has `r ncol(ny_noaa)` columns and `r nrow(ny_noaa)` rows. 
+Among all stations, `r pull(ny_noaa, prcp) %>% is.na() %>% sum()` stations didn't report precipitation, `r pull(ny_noaa, snow) %>% is.na() %>% sum()` stations didn't report snowfall,  `r pull(ny_noaa, snwd) %>% is.na() %>% sum()` stations didn't report snow depth, and `r pull(ny_noaa, tmax) %>% is.na() %>% sum()` and `r pull(ny_noaa, tmin) %>% is.na() %>% sum()` stations didn't report maximum and minimum temperature, respectively. Therefore, the resulting dataset contains extensive missing data, which could be an issue for data interpretation.
 
 * data cleaning. Create separate variables for year, month, and day. Ensure observations for temperature, precipitation, and snowfall are given in reasonable units. 
 
@@ -218,7 +212,7 @@ noaa_df %>%
   geom_line() +
   facet_grid(. ~ month_name) +
   labs(
-    title = "Average maximum temperature in January and in July in each station across years",
+    title = "Average maximum temperature in January and in July in each station",
     x = "Time (year)",
     y = "Mean Maxiumum temperature (C)"
   )
@@ -233,8 +227,12 @@ tmax_tmin_plot =
   noaa_df %>% 
   ggplot(aes(x = tmin, y = tmax)) +
   geom_hex() + 
+  theme(
+    legend.position = "right",
+    legend.direction = "vertical"
+    ) +
   labs(
-    title = "Daily minimum temperature vs minimum temperature",
+    title = "tmax vs tmin",
     x = "Minimum daily temperature (C)",
     y = "Maxiumum daily temperature (C)"
   )
@@ -246,7 +244,7 @@ snow_plot =
   ggplot(aes(x = snow, y = year)) +
   geom_density_ridges() +
   labs(
-    title = "Distribution of snowfall values greater than 0 and less than 100 by year",
+    title = "Snowfall values by year",
     y = "Time (year)",
     x = "Snowfall (mm)"
     )
