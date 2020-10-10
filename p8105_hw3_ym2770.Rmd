@@ -251,7 +251,7 @@ snow_plot =
     x = "Snowfall (mm)"
     )
 
-tmax_tmin_plot / snow_plot
+tmax_tmin_plot + snow_plot
 
 ```
 
